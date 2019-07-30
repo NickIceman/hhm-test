@@ -1,0 +1,11 @@
+.comments {
+  border: 1px solid green;
+  width: 300px;
+  text-align: center;
+  border-radius: 5px;
+  margin: 0 auto 10px;
+}
+
+.comments span {
+  font-family: Tahoma;
+}
