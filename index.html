@@ -2,9 +2,10 @@
 <html>
  <head>
    <title>Honey Hunters</title>
+   <link href="main.css" rel="stylesheet">
    <meta charset="utf-8">
  </head>
- <body>
+ <body onload="getComments();">
 
 <form action="" method="post">
   <span>Имя: </span><br>
@@ -29,6 +30,50 @@
    xmlhttp.send("name=" + encodeURIComponent(name) + "&comment=" + encodeURIComponent(comment));
   });
 </script>
+  
+  
+<script>
+   function getComments(count = 0) {
+    var xmlhttp = new XMLHttpRequest();
+    xmlhttp.open('post', 'libs/get_comments.php', true);
+    xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xmlhttp.send('count=' + count);
+    xmlhttp.onreadystatechange = function() {
+     if(xmlhttp.readyState == 4) {
+      if(xmlhttp.status == 200) {
+       var data = xmlhttp.responseText;
+       if(data != 'empty') {
+        data = JSON.parse(data);
+        for(var i = 0; i < data.length; i++) {
+         var parent = document.getElementsByTagName('body')[0];
+         var elem = document.createElement('div');
+         elem.className = 'comments';
+         parent = parent.appendChild(elem);
+         elem = document.createElement('span');
+         parent.appendChild(elem);
+         var text = data[i].name;
+         var textNode = document.createTextNode(text);
+         elem.appendChild(textNode);
+         elem = document.createElement('hr');
+         parent.appendChild(elem);
+         elem = document.createElement('div');
+         elem.className = 'comment';
+         parent.appendChild(elem);
+         text = data[i].comment;
+         textNode = document.createTextNode(text);
+         elem.appendChild(textNode);
+         var max = data[i].id;
+        }
+        count = max;
+       }
+      }
+     }
+    };
+    setTimeout(function() {
+     getComments(count);
+    }, 3000);
+   }
+  </script>
 
  </body> 
 </html>
